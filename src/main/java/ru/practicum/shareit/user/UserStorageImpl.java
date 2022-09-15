@@ -28,13 +28,13 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public User read(long id) {
-        checkUserExistance(id);
+        checkUserExistence(id);
         return users.get(id);
     }
 
     @Override
     public User update(User user) {
-        checkUserExistance(user.getId());
+        checkUserExistence(user.getId());
         User updatingUser = users.get(user.getId());
         if (user.getName() != null) {
             updatingUser.setName(user.getName());
@@ -54,7 +54,7 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public User delete(long id) {
-        checkUserExistance(id);
+        checkUserExistence(id);
         User deletedUser = users.remove(id);
         emails.remove(deletedUser.getEmail());
         return deletedUser;
@@ -79,7 +79,7 @@ public class UserStorageImpl implements UserStorage {
         }
     }
 
-    private void checkUserExistance(long id) {
+    private void checkUserExistence(long id) {
         if (!users.containsKey(id)) {
             throw new EntityNotFoundException(String.format("User with id = %s not found!", id));
         }

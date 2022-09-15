@@ -5,10 +5,11 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private long id;
+    private Long id;
     private String name;
     private String email;
 }
