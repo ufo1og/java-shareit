@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+
     @PostMapping
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") long id,
                        @Validated({Create.class}) @RequestBody ItemDto itemDto) {
