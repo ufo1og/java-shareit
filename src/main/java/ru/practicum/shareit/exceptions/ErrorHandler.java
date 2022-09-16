@@ -12,28 +12,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse validationFailHandler(ValidationFailException e) {
+    public ErrorResponse handleValidationFailException(ValidationFailException e) {
         log.warn(e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse entityNotFoundHandler(EntityNotFoundException e) {
+    public ErrorResponse handleEntityNotFoundException(EntityNotFoundException e) {
         log.warn(e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse dataConflictHandler(DataConflictException e) {
+    public ErrorResponse handleDataConflictException(DataConflictException e) {
         log.warn(e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse forbiddenAccessHandler(ForbiddenAccessException e) {
+    public ErrorResponse handleForbiddenAccessException(ForbiddenAccessException e) {
         log.warn(e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
