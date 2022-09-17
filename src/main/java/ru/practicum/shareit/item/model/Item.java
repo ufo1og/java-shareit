@@ -3,9 +3,6 @@ package ru.practicum.shareit.item.model;
 import lombok.*;
 import ru.practicum.shareit.user.User;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Setter
 @Getter
 @ToString
