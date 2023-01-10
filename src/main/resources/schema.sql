@@ -5,3 +5,13 @@ CREATE TABLE IF NOT EXISTS USERS (
     CONSTRAINT pk_user PRIMARY KEY (id),
     CONSTRAINT uq_user_email UNIQUE (email)
 );
+
+CREATE TABLE IF NOT EXISTS ITEMS (
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    name VARCHAR(32) NOT NULL,
+    description VARCHAR(256) NOT NULL,
+    is_available BOOLEAN NOT NULL,
+    owner_id BIGINT NOT NULL,
+    CONSTRAINT pk_item PRIMARY KEY (id),
+    CONSTRAINT fk_owner_id FOREIGN KEY (owner_id) REFERENCES USERS (id)
+);

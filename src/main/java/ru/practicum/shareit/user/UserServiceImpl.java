@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Transactional
+    @Override
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         validateEmail(user.getEmail());
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toDto(createdUser);
     }
 
+    @Override
     public UserDto read(long id) {
         User readUser = userRepository.findById(id).get();
         log.info("Read User: {}.", readUser);
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
+    @Override
     public UserDto update(long id, UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         User userToUpdate = userRepository.findById(id).get();
@@ -56,6 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
+    @Override
     public UserDto delete(long id) {
         User deletedUser = userRepository.findById(id).get();
         userRepository.deleteById(id);
@@ -63,6 +67,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toDto(deletedUser);
     }
 
+    @Override
     public List<UserDto> readAll() {
         List<User> readUsers = userRepository.findAll();
         return readUsers.stream()
