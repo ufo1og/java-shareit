@@ -27,13 +27,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDataConflictException(DataConflictException e) {
-        log.warn(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleForbiddenAccessException(ForbiddenAccessException e) {
         log.warn(e.getMessage(), e);
