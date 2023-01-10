@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserStorage;
+import ru.practicum.shareit.user.UserRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemStorage itemStorage;
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
     @Override
     public ItemDto add(long userId, ItemDto itemDto) {
-        User owner = userStorage.read(userId);
+        User owner = userRepository.findById(userId).get();
         Item item = ItemMapper.toItem(itemDto, owner);
         Item addedItem = itemStorage.add(item);
         return ItemMapper.toDto(addedItem);
@@ -27,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto update(long userId, long itemId, ItemDto itemDto) {
-        User owner = userStorage.read(userId);
+        User owner = userRepository.findById(userId).get();
         Item item = ItemMapper.toItem(itemDto, owner);
         item.setId(itemId);
         Item updatedItem = itemStorage.update(item);
@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getByUser(long userId) {
-        User owner = userStorage.read(userId);
+        User owner = userRepository.findById(userId).get();
         return itemStorage.getByUser(userId, owner).stream()
                 .map(ItemMapper::toDto)
                 .collect(Collectors.toList());
