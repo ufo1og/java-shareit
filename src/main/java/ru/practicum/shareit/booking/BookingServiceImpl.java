@@ -1,10 +1,12 @@
 package ru.practicum.shareit.booking;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.AddBookingDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.exceptions.ForbiddenAccessException;
 import ru.practicum.shareit.exceptions.ValidationFailException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
@@ -15,10 +17,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @AllArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BoockingRepository boockingRepository;
+
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
@@ -45,6 +49,22 @@ public class BookingServiceImpl implements BookingService {
         }
         Booking booking = BookingMapper.toBooking(bookingDto, booker);
         Booking createdBooking = boockingRepository.save(booking);
+        log.info("Created new Booking: {}.", createdBooking);
         return BookingMapper.toBookingDto(createdBooking, booker, bookingItem);
+    }
+
+    @Override
+    @Transactional
+    public BookingDto consider(Long ownerId, Long bookingId, Boolean approved) {
+        Booking booking = boockingRepository.findById(bookingId).get();
+        Item item = itemRepository.findById(booking.getItemId()).get();
+        if (!Objects.equals(ownerId, item.getOwnerId())) {
+            throw new ForbiddenAccessException("User is not the owner of the booking item!");
+        }
+        User booker = userRepository.findById(booking.getBookerId()).get();
+        booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
+        Booking updatedBooking = boockingRepository.save(booking);
+        log.info("Updated Booking: {}.", updatedBooking);
+        return BookingMapper.toBookingDto(updatedBooking, booker, item);
     }
 }

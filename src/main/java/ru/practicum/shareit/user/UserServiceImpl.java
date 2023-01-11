@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> readAll() {
         List<User> readUsers = userRepository.findAll();
+        log.info("Read Users: {}.", readUsers);
         return readUsers.stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());

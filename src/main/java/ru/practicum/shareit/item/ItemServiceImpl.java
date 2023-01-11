@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exceptions.ForbiddenAccessException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -27,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
         User owner = userRepository.findById(userId).get();
         Item item = ItemMapper.toItem(itemDto, owner.getId());
         Item addedItem = itemRepository.save(item);
+        log.info("Added new Item: {}.", addedItem);
         return ItemMapper.toDto(addedItem);
     }
 
@@ -50,18 +53,22 @@ public class ItemServiceImpl implements ItemService {
         });
         Optional.ofNullable(item.getAvailable()).ifPresent(itemToUpdate::setAvailable);
         Item updatedItem = itemRepository.save(itemToUpdate);
+        log.info("Updated Item: {}.", updatedItem);
         return ItemMapper.toDto(updatedItem);
     }
 
     @Override
     public ItemDto getById(long itemId) {
         Item item = itemRepository.findById(itemId).get();
+        log.info("Read Item: {}.", item);
         return ItemMapper.toDto(item);
     }
 
     @Override
     public List<ItemDto> getByUser(long userId) {
-        return itemRepository.findAllByOwnerId(userId).stream()
+        List<Item> readItems = itemRepository.findAllByOwnerId(userId);
+        log.info("Read Items: {}.", readItems);
+        return readItems.stream()
                 .map(ItemMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -71,7 +78,9 @@ public class ItemServiceImpl implements ItemService {
         if (text.isBlank()) {
             return Collections.emptyList();
         }
-        return itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text).stream()
+        List<Item> foundItems = itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text);
+        log.info("Found Items: {}.", foundItems);
+        return foundItems.stream()
                 .map(ItemMapper::toDto)
                 .collect(Collectors.toList());
     }
