@@ -8,4 +8,6 @@ public interface BookingService {
     BookingDto add(Long userId, AddBookingDto bookingDto);
 
     BookingDto consider(Long userId, Long bookingId, Boolean approved);
+
+    BookingDto getById(Long userId, Long bookingId);
 }

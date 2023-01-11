@@ -24,4 +24,10 @@ public class BookingController {
                                @RequestParam("approved") Boolean approved) {
         return bookingService.consider(ownerId, bookingId, approved);
     }
+
+    @GetMapping("/{bookingId}")
+    public BookingDto getById(@RequestHeader("X-Sharer-User-Id") Long userId,
+                              @PathVariable("bookingId") Long bookingId) {
+        return bookingService.getById(userId, bookingId);
+    }
 }

@@ -67,4 +67,16 @@ public class BookingServiceImpl implements BookingService {
         log.info("Updated Booking: {}.", updatedBooking);
         return BookingMapper.toBookingDto(updatedBooking, booker, item);
     }
+
+    @Override
+    public BookingDto getById(Long userId, Long bookingId) {
+        Booking booking = boockingRepository.findById(bookingId).get();
+        Item item = itemRepository.findById(booking.getItemId()).get();
+        if (!Objects.equals(userId, booking.getBookerId()) && !Objects.equals(userId, item.getOwnerId())) {
+            throw new ForbiddenAccessException("User is not the owner or booker in requested Booking!");
+        }
+        User booker = userRepository.findById(booking.getBookerId()).get();
+        log.info("Read Booking: {}.", booking);
+        return BookingMapper.toBookingDto(booking, booker, item);
+    }
 }
