@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto add(long userId, ItemDto itemDto) {
-        User owner = userRepository.findById(userId).get();
+        User owner = userRepository.findById(userId).orElseThrow();
         Item item = ItemMapper.toItem(itemDto, owner.getId());
         Item addedItem = itemRepository.save(item);
         log.info("Added new Item: {}.", addedItem);
@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto update(long userId, long itemId, ItemDto itemDto) {
-        Item itemToUpdate = itemRepository.findById(itemId).get();
+        Item itemToUpdate = itemRepository.findById(itemId).orElseThrow();
         if (itemToUpdate.getOwnerId() != userId) {
             throw new ForbiddenAccessException(String.format("User with id %s is not the owner!", userId));
         }
@@ -59,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getById(long itemId) {
-        Item item = itemRepository.findById(itemId).get();
+        Item item = itemRepository.findById(itemId).orElseThrow();
         log.info("Read Item: {}.", item);
         return ItemMapper.toDto(item);
     }

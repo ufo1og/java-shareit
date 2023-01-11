@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto read(long id) {
-        User readUser = userRepository.findById(id).get();
+        User readUser = userRepository.findById(id).orElseThrow();
         log.info("Read User: {}.", readUser);
         return UserMapper.toDto(readUser);
     }
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(long id, UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        User userToUpdate = userRepository.findById(id).get();
+        User userToUpdate = userRepository.findById(id).orElseThrow();
         Optional.ofNullable(user.getName()).ifPresent(name -> {
             if (!name.isBlank()) {
                 userToUpdate.setName(name);
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto delete(long id) {
-        User deletedUser = userRepository.findById(id).get();
+        User deletedUser = userRepository.findById(id).orElseThrow();
         userRepository.deleteById(id);
         log.info("Deleted User: {}.", deletedUser);
         return UserMapper.toDto(deletedUser);
