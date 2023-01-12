@@ -131,7 +131,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getAllOwnerBookings(Long ownerId, String state) {
         userRepository.findById(ownerId).orElseThrow();
-        List<Item> items = itemRepository.findAllByOwnerId(ownerId);
+        List<Item> items = itemRepository.findAllByOwnerIdOrderByIdAsc(ownerId);
         List<Long> itemIds = items.stream().map(Item::getId).collect(Collectors.toList());
         Map<Long, Item> mappedItems = items.stream().collect(Collectors.toMap(Item::getId, i -> i));
         if (items.isEmpty()) {
