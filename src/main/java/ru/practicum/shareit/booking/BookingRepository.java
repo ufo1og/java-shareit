@@ -10,7 +10,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBookerIdAndEndDateBeforeOrderByStartDateDesc(Long userId, LocalDateTime date);
 
-    List<Booking> findAllByBookerIdAndEndDateAfterOrderByStartDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByBookerIdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(Long userId,
+                                                                                         LocalDateTime startBeforeDate,
+                                                                                         LocalDateTime endAfterDate);
 
     List<Booking> findAllByBookerIdAndStartDateAfterOrderByStartDateDesc(Long userId, LocalDateTime date);
 
@@ -18,13 +20,22 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByItemIdInOrderByStartDateDesc(List<Long> itemIds);
 
-    List<Booking> findAllByItemIdInAndEndDateBeforeOrderByStartDateDesc(List<Long> itemIds, LocalDateTime date);
+    List<Booking> findAllByItemIdInAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(List<Long> itemIds,
+                                                                                         LocalDateTime startBeforeDate,
+                                                                                         LocalDateTime endAfterDate);
 
-    List<Booking> findAllByItemIdInAndEndDateAfterOrderByStartDateDesc(List<Long> itemIds, LocalDateTime date);
+    List<Booking> findAllByItemIdInAndEndDateBeforeAndStatusNotOrderByStartDateDesc(List<Long> itemIds,
+                                                                                    LocalDateTime date,
+                                                                                    BookingStatus status);
 
     List<Booking> findAllByItemIdInAndStartDateAfterOrderByStartDateDesc(List<Long> itemIds, LocalDateTime date);
 
     List<Booking> findAllByItemIdInAndStatusOrderByStartDateDesc(List<Long> itemIds, BookingStatus status);
 
     List<Booking> findAllByItemIdIn(List<Long> itemIds);
+
+    List<Booking> findAllByItemIdAndBookerIdAndStatusAndStartDateBefore(Long itemId, Long bookerId,
+                                                                        BookingStatus status, LocalDateTime date);
+
+//    Long countAllByItemIdAndBookerIdAndStatusIsNotLike(Long itemId, Long bookerId, BookingStatus status);
 }
