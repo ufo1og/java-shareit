@@ -14,6 +14,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+
     @PostMapping
     public BookingDto add(@RequestHeader("X-Sharer-User-Id") Long bookerId,
                           @Validated @RequestBody AddBookingDto bookingDto) {

@@ -35,5 +35,5 @@ CREATE TABLE IF NOT EXISTS COMMENTS (
     author_name VARCHAR(32) NOT NULL,
     created TIMESTAMP NOT NULL,
     CONSTRAINT pk_comment PRIMARY KEY (id),
-    CONSTRAINT fk_item_id FOREIGN KEY (item_id) REFERENCES ITEMS (id)
+    CONSTRAINT fk_comment_item_id FOREIGN KEY (item_id) REFERENCES ITEMS (id)
 );
