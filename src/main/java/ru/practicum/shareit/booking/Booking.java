@@ -5,9 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Entity
 @Table(name = "BOOKINGS")
 @Setter
@@ -18,16 +15,18 @@ import java.time.LocalDateTime;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
-    @Column(name = "item_id")
+    @Column(name = "item_id", nullable = false)
     private Long itemId;
-    @Column(name = "booker_id")
+    @Column(name = "booker_id", nullable = false)
     private Long bookerId;
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private BookingStatus status;
 
 }

@@ -164,6 +164,7 @@ public class BookingServiceImpl implements BookingService {
             default:
                 throw new UnsupportedStateException("Unknown state: UNSUPPORTED_STATUS");
         }
+        log.info("Found Bookings: {}.", bookings);
         return bookings.stream()
                 .map(booking -> {
                     Item item = mappedItems.get(booking.getItemId());

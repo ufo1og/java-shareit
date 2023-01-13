@@ -8,12 +8,14 @@ import ru.practicum.shareit.item.Create;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 
 @Getter
 @AllArgsConstructor
 public class ItemDto {
+    @Positive
     private final Long id;
     @NotBlank(groups = {Create.class})
     private final String name;
