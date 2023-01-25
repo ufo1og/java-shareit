@@ -5,7 +5,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,13 +25,10 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    public List<ItemRequestDto> getAllRequestsPaging(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                     @RequestParam(required = false, defaultValue = "0") Integer from,
-                                                     @RequestParam(required = false) Optional<Integer> size) {
-        if (size.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return itemRequestService.getAllRequestPaging(userId, from, size.get());
+    public List<ItemRequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id") long userId,
+                                               @RequestParam(required = false, defaultValue = "0") Integer from,
+                                               @RequestParam(required = false) Optional<Integer> size) {
+        return itemRequestService.getAllRequestPaging(userId, from, size);
     }
 
     @GetMapping("/{requestId}")

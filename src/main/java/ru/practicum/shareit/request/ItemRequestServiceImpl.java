@@ -16,6 +16,7 @@ import ru.practicum.shareit.user.UserRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -47,12 +48,16 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public List<ItemRequestDto> getAllRequestPaging(Long userId, Integer from, Integer size) {
-        if (from < 0 || size < 0) {
+    public List<ItemRequestDto> getAllRequestPaging(Long userId, Integer from, Optional<Integer> size) {
+        if (size.isEmpty()) {
+            return Collections.emptyList();
+        }
+        int pageSize = size.get();
+        if (from < 0 || pageSize < 0) {
             throw new ValidationFailException("Parameters 'from' and 'size' must be positive!");
         }
         User user = userRepository.findById(userId).orElseThrow();
-        Pageable itemRequestsPageRequest = PageRequest.of(from, size);
+        Pageable itemRequestsPageRequest = PageRequest.of(from, pageSize);
         List<ItemRequest> foundItemRequests = itemRequestRepository
                 .findAllByCreatorIdNotOrderByCreatedDesc(user.getId(), itemRequestsPageRequest);
         List<ItemShortDto> itemsAnsweredToRequests = getRequestsAnsweredItems(foundItemRequests);

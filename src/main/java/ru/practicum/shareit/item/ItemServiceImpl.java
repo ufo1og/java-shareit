@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -19,6 +20,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.utils.Utils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -88,8 +90,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getByUser(long userId) {
-        List<Item> readItems = itemRepository.findAllByOwnerIdOrderByIdAsc(userId);
+    public List<ItemDto> getByUser(long userId, Integer from, Optional<Integer> size) {
+        PageRequest pageRequest = Utils.getPageRequest(from, size);
+        List<Item> readItems = itemRepository.findAllByOwnerIdOrderByIdAsc(userId, pageRequest);
         List<Long> itemIds = readItems.stream().map(Item::getId).collect(Collectors.toList());
         List<Booking> bookings = bookingRepository.findAllByItemIdIn(itemIds);
         List<Comment> comments = commentRepository.findAllByItemIdIn(itemIds);
@@ -116,11 +119,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItems(String text) {
+    public List<ItemDto> searchItems(String text, Integer from, Optional<Integer> size) {
         if (text.isBlank()) {
             return Collections.emptyList();
         }
-        List<Item> foundItems = itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text);
+        PageRequest pageRequest = Utils.getPageRequest(from, size);
+        List<Item> foundItems = itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text,
+                pageRequest);
         log.info("Found Items: {}.", foundItems);
         return foundItems.stream()
                 .map(item -> ItemMapper.toItemDto(item, null, null, null))
@@ -133,8 +138,6 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId).orElseThrow();
         List<Booking> bookings = bookingRepository.findAllByItemIdAndBookerIdAndStatusAndStartDateBefore(itemId, userId,
                 BookingStatus.APPROVED, LocalDateTime.now());
-//        long count = bookingRepository.countAllByItemIdAndBookerIdAndStatusIsNotLike(itemId,
-//                userId, BookingStatus.REJECTED);
         if (bookings.isEmpty()) {
             throw new ValidationFailException(String.format("User with id = %s doesn't use item with id = %s!",
                     userId, itemId));
