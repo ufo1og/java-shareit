@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,9 +20,15 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    private UserService userService;
+
+    @BeforeEach
+    public void setUserService() {
+        this.userService = new UserServiceImpl(userRepository);
+    }
+
     @Test
     public void testCreate_InvalidEmail_ThenThrow() {
-        UserService userService = new UserServiceImpl(userRepository);
         UserDto userDto = new UserDto(1L, "John", "123");
 
         ValidationFailException e = Assertions.assertThrows(
@@ -34,7 +41,6 @@ public class UserServiceTest {
 
     @Test
     public void testCreate_ValidEmail_ThenOK() {
-        UserService userService = new UserServiceImpl(userRepository);
         UserDto userDto = new UserDto(1L, "John", "john@ya.ru");
         Mockito.when(userRepository.save(Mockito.any(User.class)))
                         .thenReturn(UserMapper.toUser(userDto));
@@ -44,7 +50,6 @@ public class UserServiceTest {
 
     @Test
     public void testUpdate_InvalidEmail_ThenThrow() {
-        UserService userService = new UserServiceImpl(userRepository);
         UserDto userDto = new UserDto(null, "John", "123");
 
         Mockito.when(userRepository.findById(1L))
@@ -60,7 +65,6 @@ public class UserServiceTest {
 
     @Test
     public void testUpdate_UpdateOnlyName_ThenOK() {
-        UserService userService = new UserServiceImpl(userRepository);
         UserDto userDto = new UserDto(null, "Sam", null);
 
         Mockito.when(userRepository.findById(1L))
@@ -75,7 +79,6 @@ public class UserServiceTest {
 
     @Test
     public void testUpdate_UpdateOnlyEmail_ThenOK() {
-        UserService userService = new UserServiceImpl(userRepository);
         UserDto userDto = new UserDto(null, null, "sam@ya.ru");
 
         Mockito.when(userRepository.findById(1L))
@@ -90,7 +93,6 @@ public class UserServiceTest {
 
     @Test
     public void testUpdate_UpdateBothNameAndEmail_ThenOK() {
-        UserService userService = new UserServiceImpl(userRepository);
         UserDto userDto = new UserDto(null, "Sam", "sam@ya.ru");
 
         Mockito.when(userRepository.findById(1L))

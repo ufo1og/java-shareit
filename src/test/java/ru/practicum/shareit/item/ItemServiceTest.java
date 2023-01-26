@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -37,13 +38,17 @@ public class ItemServiceTest {
     @Mock
     private BookingRepository bookingRepository;
 
+    private ItemService itemService;
+
+    @BeforeEach
+    public void setItemService() {
+        this.itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository, bookingRepository);
+    }
+
     @Test
     public void testAdd_WhenUserNotExists_ThenThrow() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(userRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         NoSuchElementException e = Assertions.assertThrows(
                 NoSuchElementException.class,
@@ -55,9 +60,6 @@ public class ItemServiceTest {
 
     @Test
     public void testAdd_WhenUserExists_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(userRepository.findById(1L))
                 .thenReturn(Optional.of(new User(1L, "John", "john@mail.ru")));
         Mockito.when(itemRepository.save(Mockito.any(Item.class)))
@@ -71,11 +73,8 @@ public class ItemServiceTest {
 
     @Test
     public void testUpdate_WhenItemNotFound_ThenThrow() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(itemRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         NoSuchElementException e = Assertions.assertThrows(
                 NoSuchElementException.class,
@@ -87,9 +86,6 @@ public class ItemServiceTest {
 
     @Test
     public void testUpdate_WhenUserNotMatch_ThenThrow() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(itemRepository.findById(1L))
                 .thenReturn(Optional.of(new Item(1L, null, null, true, 100L, null)));
 
@@ -103,8 +99,6 @@ public class ItemServiceTest {
 
     @Test
     public void testUpdate_UpdateOnlyName_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
         Item item = new Item(1L, "item", "good item", true, 1L, null);
 
         Mockito.when(itemRepository.findById(1L))
@@ -122,8 +116,6 @@ public class ItemServiceTest {
 
     @Test
     public void testUpdate_UpdateOnlyDescription_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
         Item item = new Item(1L, "item", "good item", true, 1L, null);
 
         Mockito.when(itemRepository.findById(1L))
@@ -141,8 +133,6 @@ public class ItemServiceTest {
 
     @Test
     public void testUpdate_UpdateOnlyAvailable_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
         Item item = new Item(1L, "item", "good item", true, 1L, null);
 
         Mockito.when(itemRepository.findById(1L))
@@ -160,8 +150,6 @@ public class ItemServiceTest {
 
     @Test
     public void testUpdate_UpdateNameAndDescriptionAndAvailable_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
         Item item = new Item(1L, "item", "good item", true, 1L, null);
 
         Mockito.when(itemRepository.findById(1L))
@@ -181,11 +169,8 @@ public class ItemServiceTest {
 
     @Test
     public void testGetById_WhenItemNotExists_ThenThrow() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(itemRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         NoSuchElementException e = Assertions.assertThrows(
                 NoSuchElementException.class,
@@ -197,8 +182,6 @@ public class ItemServiceTest {
 
     @Test
     public void testGetById_WhenUserNotOwner_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
         List<Comment> comments = List.of(new Comment(1L, 1L, "really good item", "Sam",
                 LocalDateTime.now().minusYears(1)));
         Mockito.when(itemRepository.findById(Mockito.anyLong()))
@@ -219,9 +202,6 @@ public class ItemServiceTest {
 
     @Test
     public void testGetById_WhenUSerIsOwner_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         List<Comment> comments = List.of(new Comment(1L, 1L, "really good item", "Sam",
                 LocalDateTime.now().minusYears(1)));
 
@@ -251,9 +231,6 @@ public class ItemServiceTest {
 
     @Test
     public void testGetByUser_StandardBehaviour_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Item firstItem = new Item(1L, "item1", "item1_desc", true, 1L, null);
         Item secondItem = new Item(2L, "item1", "item1_desc", true, 1L, null);
         List<Item> items = List.of(firstItem, secondItem);
@@ -292,9 +269,6 @@ public class ItemServiceTest {
 
     @Test
     public void testSearchItems_WhenTextIsEmpty_ThenReturnEmptyList() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         List<ItemDto> foundItems = itemService.searchItems("", 0, Optional.of(10));
 
         assertThat(foundItems.size(), is(equalTo(0)));
@@ -302,9 +276,6 @@ public class ItemServiceTest {
 
     @Test
     public void testSearchItems_StandardBehaviour_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(Mockito.anyString(),
                 Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(Collections.emptyList());
 
@@ -315,11 +286,8 @@ public class ItemServiceTest {
 
     @Test
     public void testAddComment_UserNotExists_ThenThrow() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(userRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         NoSuchElementException e = Assertions.assertThrows(
                 NoSuchElementException.class,
@@ -331,9 +299,6 @@ public class ItemServiceTest {
 
     @Test
     public void testAddComment_UserDontUseItem_ThenThrow() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(userRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(new User(1L, "John", "john@ya.ru")));
         Mockito.when(bookingRepository.findAllByItemIdAndBookerIdAndStatusAndStartDateBefore(Mockito.anyLong(),
@@ -350,9 +315,6 @@ public class ItemServiceTest {
 
     @Test
     public void testAddComment_StandardBehaviour_ThenOK() {
-        ItemService itemService = new ItemServiceImpl(commentRepository, itemRepository, userRepository,
-                bookingRepository);
-
         Mockito.when(userRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(new User(1L, "John", "john@ya.ru")));
         Mockito.when(bookingRepository.findAllByItemIdAndBookerIdAndStatusAndStartDateBefore(Mockito.anyLong(),
