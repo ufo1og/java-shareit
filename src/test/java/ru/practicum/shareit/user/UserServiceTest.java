@@ -17,7 +17,7 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
     public void testCreate_InvalidEmail_ThenThrow() {
