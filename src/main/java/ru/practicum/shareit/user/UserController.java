@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @PostMapping
     public UserDto create(@Validated({Create.class}) @RequestBody UserDto userDto) {
