@@ -16,7 +16,7 @@ public class ItemRequestController {
     @PostMapping
     public ItemRequestDto addNewRequest(@RequestHeader("X-Sharer-User-Id") long userId,
                                         @Validated @RequestBody ItemRequestDto itemRequestDto) {
-        return itemRequestService.addNewRequest(itemRequestDto, userId);
+        return itemRequestService.add(itemRequestDto, userId);
     }
 
     @GetMapping
@@ -28,7 +28,7 @@ public class ItemRequestController {
     public List<ItemRequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id") long userId,
                                                @RequestParam(required = false, defaultValue = "0") Integer from,
                                                @RequestParam(required = false) Optional<Integer> size) {
-        return itemRequestService.getAllRequestPaging(userId, from, size);
+        return itemRequestService.getAllRequests(userId, from, size);
     }
 
     @GetMapping("/{requestId}")

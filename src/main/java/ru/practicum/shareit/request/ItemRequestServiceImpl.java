@@ -30,7 +30,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     @Transactional
-    public ItemRequestDto addNewRequest(ItemRequestDto itemRequestDto, Long userId) {
+    public ItemRequestDto add(ItemRequestDto itemRequestDto, Long userId) {
         User creator = userRepository.findById(userId).orElseThrow();
         ItemRequest itemRequest = ItemRequestMapper.toItemRequest(itemRequestDto, creator);
         ItemRequest createdItemRequest = itemRequestRepository.save(itemRequest);
@@ -48,7 +48,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public List<ItemRequestDto> getAllRequestPaging(Long userId, Integer from, Optional<Integer> size) {
+    public List<ItemRequestDto> getAllRequests(Long userId, Integer from, Optional<Integer> size) {
         if (size.isEmpty()) {
             return Collections.emptyList();
         }
