@@ -48,6 +48,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByItemIdAndBookerIdAndStatusAndStartDateBefore(Long itemId, Long bookerId,
                                                                         BookingStatus status, LocalDateTime date);
-
-//    Long countAllByItemIdAndBookerIdAndStatusIsNotLike(Long itemId, Long bookerId, BookingStatus status);
 }
