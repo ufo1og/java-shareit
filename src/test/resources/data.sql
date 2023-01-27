@@ -28,4 +28,15 @@ VALUES ('Дрель', 'Привет соседям', true, 1, null),
        ('Ключ-трещетка', 'С набором головок', true, 6, null),
        ('Рубанок', 'Старый дедовский', true, 7, null),
        ('Болгарка', 'Без дисков', true, 9, null),
-       ('Шуруповерт', 'Переносной шуруповерт с аккумулятором', true, 9, 3);
+       ('Шуруповерт', 'Переносной шуруповерт с аккумулятором', true, 9, 3),
+       ('Шуруповерт', 'Шуруповерт проводной мощный', false, 9, null);
+
+INSERT INTO bookings (start_date, end_date, status, item_id, booker_id)
+VALUES (now() - interval '10 days', now() - interval '5 days', 'APPROVED', 1, 3),
+       (now() - interval '9 days', now() - interval '5 days', 'APPROVED', 2, 4),
+       (now() + interval '2 days', now() + interval '5 days', 'WAITING', 3, 10),
+       (now() - interval '4 days', now() - interval '3 days', 'REJECTED', 1, 10),
+       (now() - interval '8 days', now() - interval '2 days', 'CANCELED', 1, 4),
+       (now() - interval '1 days', now() + interval '5 days', 'APPROVED', 5, 3),
+       (now() - interval '2 days', now() + interval '5 days', 'APPROVED', 6, 9),
+       (now() + interval '2 days', now() + interval '5 days', 'WAITING', 10, 3);
