@@ -124,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
             return Collections.emptyList();
         }
         PageRequest pageRequest = Utils.getPageRequest(from, size);
-        List<Item> foundItems = itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text,
+        List<Item> foundItems = itemRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text,
                 pageRequest);
         log.info("Found Items: {}.", foundItems);
         return foundItems.stream()

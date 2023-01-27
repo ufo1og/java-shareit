@@ -276,7 +276,7 @@ public class ItemServiceTest {
 
     @Test
     public void testSearchItems_StandardBehaviour_ThenOK() {
-        Mockito.when(itemRepository.findByNameOrDescriptionContainingIgnoreCaseAndAvailableTrue(Mockito.anyString(),
+        Mockito.when(itemRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailableTrue(Mockito.anyString(),
                 Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(Collections.emptyList());
 
         List<ItemDto> foundItems = itemService.searchItems("item", 0, Optional.of(10));
