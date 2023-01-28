@@ -14,8 +14,8 @@ import java.util.Optional;
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
     @PostMapping
-    public ItemRequestDto addNewRequest(@RequestHeader("X-Sharer-User-Id") long userId,
-                                        @Validated @RequestBody ItemRequestDto itemRequestDto) {
+    public ItemRequestDto add(@RequestHeader("X-Sharer-User-Id") long userId,
+                              @Validated @RequestBody ItemRequestDto itemRequestDto) {
         return itemRequestService.add(itemRequestDto, userId);
     }
 
