@@ -136,6 +136,7 @@ public class BookingControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     public void testConsider_WhenSomeNotFound_ThenNotFound() throws Exception {
         when(bookingService.consider(anyLong(), anyLong(), anyBoolean()))
