@@ -40,3 +40,7 @@ VALUES (now() - interval '10 days', now() - interval '5 days', 'APPROVED', 1, 3)
        (now() - interval '1 days', now() + interval '5 days', 'APPROVED', 5, 3),
        (now() - interval '2 days', now() + interval '5 days', 'APPROVED', 6, 9),
        (now() + interval '2 days', now() + interval '5 days', 'WAITING', 10, 3);
+
+INSERT INTO comments (item_id, text, author_name, created)
+VALUES (1, 'Соседи вообще кайфанули!', 'Степан', now() - interval '1 day'),
+       (2, 'Отвертка то что надо! ручка очень удобная.', 'Петр', now() - interval '3 days');
