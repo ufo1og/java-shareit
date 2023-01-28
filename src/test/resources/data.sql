@@ -12,11 +12,11 @@ VALUES ('Иван', 'ivan@ya.ru'),
        ('Николай', 'nikolay@ya.ru');
 
 INSERT INTO item_requests (description, created, creator_id)
-VALUES ('Нужен перфоратор', now() - interval '10 days', 10),
-       ('Ищу молоток', now() - interval '3 days', 8),
-       ('Нужен хороший шуруповерт', now() - interval '6 days', 1),
-       ('Ищу подругу', now() - interval '156 days', 8),
-       ('Есть у кого-то отбойный молоток?', now() - interval '1 day', 3);
+VALUES ('Нужен перфоратор', now() - interval '10' day, 10),
+       ('Ищу молоток', now() - interval '3' day, 8),
+       ('Нужен хороший шуруповерт', now() - interval '6' day, 1),
+       ('Ищу подругу', now() - interval '156' day, 8),
+       ('Есть у кого-то отбойный молоток?', now() - interval '1' day, 3);
 
 INSERT INTO items (name, description, is_available, owner_id, request_id)
 VALUES ('Дрель', 'Привет соседям', true, 1, null),
@@ -32,15 +32,15 @@ VALUES ('Дрель', 'Привет соседям', true, 1, null),
        ('Шуруповерт', 'Шуруповерт проводной мощный', false, 9, null);
 
 INSERT INTO bookings (start_date, end_date, status, item_id, booker_id)
-VALUES (now() - interval '10 days', now() - interval '5 days', 'APPROVED', 1, 3),
-       (now() - interval '9 days', now() - interval '5 days', 'APPROVED', 2, 4),
-       (now() + interval '2 days', now() + interval '5 days', 'WAITING', 3, 10),
-       (now() - interval '4 days', now() - interval '3 days', 'REJECTED', 1, 10),
-       (now() - interval '8 days', now() - interval '2 days', 'CANCELED', 1, 4),
-       (now() - interval '1 days', now() + interval '5 days', 'APPROVED', 5, 3),
-       (now() - interval '2 days', now() + interval '5 days', 'APPROVED', 6, 9),
-       (now() + interval '2 days', now() + interval '5 days', 'WAITING', 10, 3);
+VALUES (now() - interval '10' day, now() - interval '5' day, 'APPROVED', 1, 3),
+       (now() - interval '9' day, now() - interval '5' day, 'APPROVED', 2, 4),
+       (now() + interval '2' day, now() + interval '5' day, 'WAITING', 3, 10),
+       (now() - interval '4' day, now() - interval '3' day, 'REJECTED', 1, 10),
+       (now() - interval '8' day, now() - interval '2' day, 'CANCELED', 1, 4),
+       (now() - interval '1' day, now() + interval '5' day, 'APPROVED', 5, 3),
+       (now() - interval '2' day, now() + interval '5' day, 'APPROVED', 6, 9),
+       (now() + interval '2' day, now() + interval '5' day, 'WAITING', 10, 3);
 
 INSERT INTO comments (item_id, text, author_name, created)
-VALUES (1, 'Соседи вообще кайфанули!', 'Степан', now() - interval '1 day'),
-       (2, 'Отвертка то что надо! ручка очень удобная.', 'Петр', now() - interval '3 days');
+VALUES (1, 'Соседи вообще кайфанули!', 'Степан', now() - interval '1' day),
+       (2, 'Отвертка то что надо! ручка очень удобная.', 'Петр', now() - interval '3' day);
