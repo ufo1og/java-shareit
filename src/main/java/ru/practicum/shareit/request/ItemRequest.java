@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class ItemRequest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         ItemRequest that = (ItemRequest) o;
         return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(created, that.created) && Objects.equals(creatorId, that.creatorId);
     }
