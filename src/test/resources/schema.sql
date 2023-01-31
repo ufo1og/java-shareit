@@ -1,3 +1,11 @@
+-- Сброс БД перед тестами
+drop table bookings cascade;
+drop table comments cascade;
+drop table items cascade;
+drop table item_requests cascade;
+drop table users cascade;
+
+-- Создание таблиц в тестовой БД
 CREATE TABLE IF NOT EXISTS USERS (
     id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
     name VARCHAR(64) NOT NULL,
